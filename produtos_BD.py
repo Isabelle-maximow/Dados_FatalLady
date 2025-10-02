@@ -4,7 +4,7 @@ import random
 CONFIG_BANCO = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'dev1t@24',
+    'password': 'mimiebella',
     'database': 'fatallady_bd',
 }
 conexao = mysql.connector.connect(**CONFIG_BANCO)
