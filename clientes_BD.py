@@ -5,7 +5,7 @@ CONFIG_BANCO = {
     'host': 'localhost',
     'user': 'root',
     'password': 'dev1t@24',
-    'database': 'fatallady_bd',
+    'database': 'fatallady',
 }
 conexao = mysql.connector.connect(**CONFIG_BANCO)
 cursor = conexao.cursor()
@@ -74,4 +74,4 @@ conexao.commit()
 
 cursor.close()
 conexao.close()
-print(f"{len(clientes)} clientes inseridos com sucesso!")
+

@@ -6,7 +6,7 @@ CONFIG_BANCO = {
     'host': 'localhost',
     'user': 'root',
     'password': 'dev1t@24',
-    'database': 'fatallady_bd',
+    'database': 'fatallady',
 }
 conexao = mysql.connector.connect(**CONFIG_BANCO)
 cursor = conexao.cursor()
@@ -26,11 +26,9 @@ conexao.commit()
 cursor.execute("SELECT ID FROM CLIENTES")
 ids_clientes = [row[0] for row in cursor.fetchall()]
 
-if not ids_clientes:
-    print("Nenhum cliente encontrado. Insira clientes antes de gerar pedidos.")
-else:
-    status_opcoes = ["Pendente", "Pago", "Enviado", "Concluído", "Cancelado"]
-    pedidos = []
+
+status_opcoes = ["Pendente", "Pago", "Enviado", "Concluído", "Cancelado"]
+pedidos = []
 
 for _ in range(1000):  
     id_cliente = random.choice(ids_clientes)
