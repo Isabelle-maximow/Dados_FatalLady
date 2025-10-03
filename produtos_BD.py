@@ -1,15 +1,16 @@
-import mysql.connector
+import pymysql
 import random
 
 CONFIG_BANCO = {
     'host': 'localhost',
-    'user': 'root',
-    'password': 'dev1t@24',
+    'user': 'isabelle',
+    'password': 'mimiebella',
     'database': 'fatallady',
+    'charset': 'utf8mb4'
 }
 
 # Conectar ao banco
-conexao = mysql.connector.connect(**CONFIG_BANCO)
+conexao = pymysql.connect(**CONFIG_BANCO)
 cursor = conexao.cursor()
 
 # Criar tabela de produtos
@@ -72,3 +73,4 @@ conexao.commit()
 # Encerrar conexão
 cursor.close()
 conexao.close()
+print(f"{len(valores)} produtos inseridos com sucesso!")

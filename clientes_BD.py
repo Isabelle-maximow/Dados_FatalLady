@@ -1,15 +1,19 @@
-import mysql.connector
+import pymysql
 import random
 
 CONFIG_BANCO = {
     'host': 'localhost',
-    'user': 'root',
-    'password': 'dev1t@24',
+    'user': 'isabelle',
+    'password': 'mimiebella',
     'database': 'fatallady',
+    'charset': 'utf8mb4'
 }
-conexao = mysql.connector.connect(**CONFIG_BANCO)
+
+# Conectar ao banco
+conexao = pymysql.connect(**CONFIG_BANCO)
 cursor = conexao.cursor()
 
+# Criar tabela CLIENTES
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS CLIENTES (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -25,6 +29,7 @@ CREATE TABLE IF NOT EXISTS CLIENTES (
 """)
 conexao.commit()
 
+# Dados base
 nomes = [
     "Ana", "Beatriz", "Carla", "Daniel", "Eduardo", "Fernanda", "Gabriel", "Helena",
     "Isabela", "João", "Kátia", "Lucas", "Mariana", "Natália", "Otávio", "Paula",
@@ -42,9 +47,9 @@ cidades = [
     "Boa Vista", "Itaqua", "Guararema", "Moema", "Itaim Bibi",
     "Itaquera", "São Caetano", "Osasco", "Sorocaba"
 ]
-
 paises = ["Brasil", "Portugal"]
 
+# Clientes iniciais fixos
 clientes = [
     ("Ana Silva", "ana@email.com", "senha123", 12345678, "Rua das Flores", "Moema", "Brasil", 11999999999),
     ("Carlos Souza", "carlos@email.com", "senha456", 87654321, "Av. Paulista", "Itaim Bibi", "Brasil", 11988888888),
@@ -53,18 +58,20 @@ clientes = [
     ("Beatriz Costa", "beatriz@email.com", "senha654", 55667788, "Av. Central", "Sorocaba", "Brasil", 11955555555)
 ]
 
+# Gerar mais 1000 clientes aleatórios
 for _ in range(1000):
     nome_completo = f"{random.choice(nomes)} {random.choice(sobrenomes)}"
-    email = nome_completo.replace(" ", ".").lower() + str(random.randint(1,9999)) + "@email.com"
-    senha = f"senha{random.randint(1000,9999)}"
+    email = nome_completo.replace(" ", ".").lower() + str(random.randint(1, 9999)) + "@email.com"
+    senha = f"senha{random.randint(1000, 9999)}"
     cep = random.randint(10000000, 99999999)
     rua = random.choice(ruas)
     cidade = random.choice(cidades)
     pais = random.choice(paises)
-    telefone = random.randint(11940000000, 11949999999) 
+    telefone = random.randint(11940000000, 11949999999)
 
     clientes.append((nome_completo, email, senha, cep, rua, cidade, pais, telefone))
 
+# Inserir clientes no banco
 sql = """
 INSERT INTO CLIENTES (Nome, Email, Senha, CEP, Rua, Cidade, País, Telefone)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
@@ -72,6 +79,8 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
 cursor.executemany(sql, clientes)
 conexao.commit()
 
+print(f"{len(clientes)} clientes inseridos com sucesso!")
+
+# Fechar conexão
 cursor.close()
 conexao.close()
-

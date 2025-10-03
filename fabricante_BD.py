@@ -1,18 +1,19 @@
-import mysql.connector
+import pymysql
 import random
 
 CONFIG_BANCO = {
     'host': 'localhost',
-    'user': 'root',
-    'password': 'dev1t@24',
+    'user': 'isabelle',
+    'password': 'mimiebella',
     'database': 'fatallady',
+    'charset': 'utf8mb4'
 }
 
 # Conexão com o banco
-conexao = mysql.connector.connect(**CONFIG_BANCO)
+conexao = pymysql.connect(**CONFIG_BANCO)
 cursor = conexao.cursor()
 
-# Criar tabela CLIENTES (sem acento em nomes de colunas!)
+# Criar tabela FABRICANTES
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS FABRICANTES (
     ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -27,11 +28,11 @@ conexao.commit()
 # Dados base
 nomes = ["TechNova", "LuxWear", "VitaModa", "UrbanEdge", "PrimeStyle", "Fatal Lady"]
 estados = ["SP", "RJ", "MG", "RS", "PR", "SC", "BA", "PE", "CE", "GO"]
-cidades = ["Campinas", "Ribeirão Preto", "Santos", "Jundiaí", "Piracicaba", "Taubaté", "Barueri", "Franca", "Bauru"]
+cidades = ["Campinas", "Ribeirão Preto", "Santos", "Jundiaí", "Piracicaba", "Taubaté", "Barueri", "Franca", "Bauru", "São Paulo"]
 paises = ["Brasil", "Portugal"]
 
-# Lista de clientes
-fabricante = [
+# Fabricantes fixos iniciais
+fabricantes = [
     ("TechNova", "Campinas", "Brasil", "SP"),
     ("LuxWear", "Ribeirão Preto", "Brasil", "SP"),
     ("VitaModa", "Santos", "Brasil", "SP"),
@@ -40,22 +41,23 @@ fabricante = [
     ("Fatal Lady", "São Paulo", "Brasil", "SP")
 ]
 
-# Gerar mais 1000 clientes aleatórios
+# Gerar mais fabricantes aleatórios
 for _ in range(1000):
     nome = random.choice(nomes)
     estado = random.choice(estados)
     cidade = random.choice(cidades)
     pais = random.choice(paises)
+    fabricantes.append((nome, cidade, pais, estado))
 
-    fabricante.append((nome, cidade, pais, estado))
-
-# Inserir clientes no banco
+# Inserir no banco
 sql = """
 INSERT INTO FABRICANTES (Nome, Cidade, Pais, Estado)
 VALUES (%s, %s, %s, %s)
 """
-cursor.executemany(sql, fabricante)
+cursor.executemany(sql, fabricantes)
 conexao.commit()
+
+print(f"{len(fabricantes)} fabricantes inseridos com sucesso!")
 
 # Fechar conexão
 cursor.close()
